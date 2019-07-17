@@ -1,16 +1,17 @@
 # coding=gbk
-
 import time
 import csv
-import sys, os
+import sys
+import os
+from util.Open_DB import MYSQL
+from util.config import MySQL_CONFIG, file_path, scheduler_file_path
+from util.get_result_file_name import get_result_file_name
+
 
 current_path = os.path.abspath(os.path.dirname(__file__))
 root_path = os.path.split(current_path)[0]
 sys.path.append(root_path)
-# print(sys.path)
-from util.Open_DB import MYSQL
-from util.config import MySQL_CONFIG, file_path, scheduler_file_path
-from util.get_result_file_name import get_result_file_name
+
 
 class GetExecutionStatus(object):
     """
@@ -22,7 +23,7 @@ class GetExecutionStatus(object):
         """初始化数据库连接"""
         self.ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
 
-    def exec_sql(self,scheduler_id):
+    def exec_sql(self, scheduler_id):
         """
         根据schedulers id 查询出execution id
         创建scheduler后查询execution有延迟，需要加等待时间
@@ -35,7 +36,6 @@ class GetExecutionStatus(object):
             return result[0]
         except Exception:
             return
-
 
     def get_execution_status(self):
         # csv表的header: scheduler_id,execution_id,status,flow_name,flow_id
@@ -92,19 +92,9 @@ class GetExecutionStatus(object):
                 print(executions[i])
                 new_file.writerow(executions[i])
 
-    # def count(self):
-    #     success = 0
-    #     fail = 0
-    #
-
 
 if __name__ == '__main__':
     g = GetExecutionStatus()
-    # g.get_execution_status()
-    # file = "E://jmeter//cases//creates_scheduler_200//81//jmeter_script//scheduler_execution_81.csv"
-    # # ex = [("Ken", "msfe", 23),    ("TeMe", "maee", 29),    ("Js", "fele", 92)]
-    # ex = [('3dfabf1b-98f8-4d42-a8fe-753a69441a8c', '751e320d-feb7-44be-88ab-a74e860ac16f', 'FAILED', 'jemter_aggregate001', '6f05c9e0-cc96-4032-aa81-cdb5de3ec49a'),('3dfabf1b-98f8-4d42-a8fe-753a69441a8c', '751e320d-feb7-44be-88ab-a74e860ac16f', 'FAILED', 'jemter_aggregate001', '6f05c9e0-cc96-4032-aa81-cdb5de3ec49a')]
-    #
 
     g.get_execution_status()
 

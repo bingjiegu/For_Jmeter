@@ -100,5 +100,5 @@ MySQL_CONFIG = {
     "PASSWORD": 'merce',
     "DB": 'database_81'
 }
-file_path = "D://git//for_jmeter//result//81"
+file_path = "D://git//For_Jmeter//for_jmeter//result//"
 scheduler_file_path = "E://jmeter//cases//creates_scheduler_200//81//jmeter_script//scheduler_id_81.csv"
