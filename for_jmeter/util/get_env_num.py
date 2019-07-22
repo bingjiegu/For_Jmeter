@@ -15,5 +15,5 @@ def get_env_num(host):
     # print(env_num)
     return env_num
 
-host = "http://192.168.1.57:8515/api/datasets"
-get_env_num(host)
+# host = "http://192.168.1.57:8515/api/datasets"
+# print(get_env_num(host))
