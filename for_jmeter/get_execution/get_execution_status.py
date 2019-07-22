@@ -4,8 +4,11 @@ import csv
 import sys
 import os
 from util.Open_DB import MYSQL
-from util.config import MySQL_CONFIG, file_path, scheduler_file_path
+from util.config import file_path, scheduler_file_path
 from util.get_result_file_name import get_result_file_name
+from util.get_host import mysql_config
+from util.get_execution_log import GetLog
+from util.get_host import HOST
 
 
 current_path = os.path.abspath(os.path.dirname(__file__))
@@ -21,7 +24,7 @@ class GetExecutionStatus(object):
 
     def __init__(self):
         """初始化数据库连接"""
-        self.ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
+        self.ms = MYSQL(mysql_config["HOST"], mysql_config["USER"], mysql_config["PASSWORD"], mysql_config["DB"])
 
     def exec_sql(self, scheduler_id):
         """
@@ -30,7 +33,7 @@ class GetExecutionStatus(object):
         """
         time.sleep(3)
         # if scheduler:
-        execution_sql = "select id,status_type, flow_name, flow_id from merce_flow_execution where flow_scheduler_id = '%s'" % scheduler_id
+        execution_sql = "select id, status_type, flow_name, flow_id from merce_flow_execution where flow_scheduler_id = '%s'" % scheduler_id
         try:
             result = self.ms.ExecuQuery(execution_sql)
             return result[0]
@@ -38,9 +41,10 @@ class GetExecutionStatus(object):
             return
 
     def get_execution_status(self):
+        """该方法用来循环查询execution的最终执行状态，并将execution信息写入指定表中"""
         # csv表的header: scheduler_id,execution_id,status,flow_name,flow_id
         # 读取jmeter脚本创建scheduler后保存scheduler id的CSV文件，依次查询到其对应的execution信息，并写入一个新的file中
-        header = ('scheduler_id', 'execution_id', 'status', 'flow_name', 'flow_id')
+        header = ('scheduler_id', 'execution_id', 'status', 'flow_name', 'flow_id', 'log_url')
         print("------开始执行get_execution_status(self)------\n")
         with open(scheduler_file_path, "r") as f:
             readers = csv.reader(f)
@@ -72,15 +76,16 @@ class GetExecutionStatus(object):
                         print('再次查询后的execution"status_type"]', e_info)
                 # 获取execution的最终执行状态后，将信息存入元祖，并依次append到列表executions中
                 if e_info["status_type"] in ("SUCCEEDED", "FAILED", "KILLED"):
+                    e_log_url = GetLog(e_info["id"]).get_log_url()
                     tp_execution = (scheduler_id[0],) + (e_info["id"],) + (e_info["status_type"],) + (
-                    e_info["flow_name"],) + (e_info["flow_id"],)
+                    e_info["flow_name"],) + (e_info["flow_id"],) + (e_log_url,)
                     # print("tp_execution", tp_execution)
                     executions.append(tp_execution)
                     print("executions", executions)
 
             # 依次从列表executions中读取元祖数据，并写入一个新的csv表中
-            file_name = get_result_file_name(file_path)
-            self.write_execution(file_name, executions)
+            file = get_result_file_name(file_path, HOST)
+            self.write_execution(file, executions)
             print('write over')
 
     @staticmethod
@@ -94,8 +99,7 @@ class GetExecutionStatus(object):
 
 
 if __name__ == '__main__':
-    g = GetExecutionStatus()
+    GetExecutionStatus()
 
-    g.get_execution_status()
 
 

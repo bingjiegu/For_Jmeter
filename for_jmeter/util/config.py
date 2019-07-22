@@ -1,6 +1,7 @@
 # coding:utf-8
 import os
-
+from util.encrypt import encrypt_rf
+from util.get_host import HOST
 
 BASE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__name__)))
 DATA_PATH = os.path.join(BASE_PATH, 'test_cases')
@@ -15,90 +16,35 @@ email_to = {
     "daming": "zhiming.wang@inforefiner.com",
             }
 
-# ------84环境使用--------
-#  HOST
-# HOST_189 = "http://192.168.1.84:8515"
-# # 数据库连接信息
-# MySQL_CONFIG = {
-#     'HOST': '192.168.1.189',
-#     "PORT": 3306,
-#     "USER": 'merce',
-#     "PASSWORD": 'merce',
-#     "DB": 'info4_merce',
-#     'case_db': 'test'
-# }
 
-# ------83环境使用--------
-# #  HOST
-# HOST_189 = "http://192.168.1.83:8515"
-# # 数据库连接信息
-# MySQL_CONFIG = {
-#     'HOST': '192.168.1.189',
-#     "PORT": 3306,
-#     "USER": 'merce',
-#     "PASSWORD": 'merce',
-#     "DB": 'wac',
-#     'case_db': 'test'
-# }
-
-# # -------189环境使用-------
-# HOST
-# HOST_189 = "http://192.168.1.189:8515"
-# # 数据库的连接配置，需要根据不同环境进行变更
-# MySQL_CONFIG = {
-#     'HOST': '192.168.1.199',
-#     "PORT": 3306,
-#     "USER": 'merce',
-#     "PASSWORD": '123456',
-#     "DB": 'merce',
-#     'case_db': 'test'}
-
-# # -------57环境使用-------
-# HOST
-# HOST_189 = "http://192.168.1.57:8515"
-# # # # # 数据库连接信息
-# MySQL_CONFIG = {
-#     'HOST': '192.168.1.57',
-#     "PORT": 3306,
-#     "USER": 'merce',
-#     "PASSWORD": 'merce',
-#     "DB": 'merce'
-# }
-
-# MySQL_CONFIG = {
-#     'HOST': '192.168.1.199',
-#     "PORT": 3306,
-#     "USER": 'merce',
-#     "PASSWORD": '123456',
-#     "DB": 'merce',
-#     'case_db': 'test'
-# }
-
-# -------57环境使用-------
-# HOST
-# HOST_189 = "http://192.168.1.57:8515"
-# # # # # 数据库连接信息
-# MySQL_CONFIG = {
-#     'HOST': '192.168.1.57',
-#     "PORT": 3306,
-#     "USER": 'merce',
-#     "PASSWORD": 'merce',
-#     "DB": 'merce'
-# }
-# file_path = "D://git//for_jmeter//result//"
-# scheduler_file_path = "E://jmeter//cases//creates_scheduler_200//57//scheduler_id_57.csv"
-
-
-# -------81环境使用-------
-# HOST
-HOST_189 = "http://192.168.1.81:8515"
-# # # # 数据库连接信息
-MySQL_CONFIG = {
-    'HOST': '192.168.1.57',
-    "PORT": 3306,
-    "USER": 'merce',
-    "PASSWORD": 'merce',
-    "DB": 'database_81'
+MY_LOGIN_INFO = {
+ "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded'},
+ "URL": "%s/api/auth/login" % HOST,
+ "DATA": {'name': encrypt_rf('admin'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')},
+ "DATA_ERROR_NAME": {'name': encrypt_rf('adminn'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')},
+ "HOST": "%s" % HOST
 }
+
+MY_LOGIN_INFO_dam = {
+ "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded'},
+ "URL": "%s/api/auth/login" % HOST,
+ "DATA": {'name': '13ec4fe486e87d0b1145f2248a090db5', 'password': '3cde4fd05c58aee9937bfb2db12c9a91', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': '1463a3ec85fbfbeb2fe07183d7518a48'},
+ "DATA_ERROR_NAME": {'name': encrypt_rf('adminn'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')},
+ "HOST": "%s" % HOST
+}
+
+
 file_path = "D://git//For_Jmeter//for_jmeter//result//"
-scheduler_file_path = "E://jmeter//cases//creates_scheduler_200//81//jmeter_script//scheduler_id_81.csv"
+
+scheduler_file_path = "E://jmeter//cases//creates_scheduler_200//57//scheduler_id_57.csv"
+
+
+
+
+
+
+
+
+
+# file_path = "D://git//For_Jmeter//for_jmeter//result//"
+# scheduler_file_path = "E://jmeter//cases//creates_scheduler_200//81//jmeter_script//scheduler_id_81.csv"

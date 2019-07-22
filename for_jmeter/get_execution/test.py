@@ -23,7 +23,7 @@ class GetExecutionStatus(object):
         """初始化数据库连接"""
         self.ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
 
-    def exec_sql(self,scheduler_id):
+    def exec_sql(self, scheduler_id):
         """
         根据schedulers id 查询出execution id
         创建scheduler后查询execution有延迟，需要加等待时间
@@ -36,7 +36,6 @@ class GetExecutionStatus(object):
             return result[0]
         except Exception:
             return
-
 
     def get_execution_status(self):
         # csv表的header: scheduler_id,execution_id,status,flow_name,flow_id
@@ -99,4 +98,4 @@ if __name__ == '__main__':
 
     # g.get_execution_status()
 
-print(os.path.dirname(__file__))
+
